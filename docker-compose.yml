@@ -1,0 +1,24 @@
+services:
+  app:
+    build: .
+    user: "1000:1000"
+    environment:
+      - OUTPUT_DIR=/app/vault
+      - GIT_SSH_COMMAND=ssh -i /tmp/github_key -o StrictHostKeyChecking=accept-new
+    volumes:
+      - .:/app                                              # full repo (code, vault/, git history)
+      - ./.env:/app/programming_trends/.env                # secrets
+      - ~/.ssh/private_key:/tmp/github_key:ro              # SSH key for git push
+      - ~/.ssh/known_hosts:/tmp/known_hosts:ro             # known hosts
+
+  watcher:
+    build: .
+    user: "1000:1000"
+    restart: unless-stopped
+    entrypoint: ["/bin/sh", "/app/watcher.sh"]
+    environment:
+      - GIT_SSH_COMMAND=ssh -i /tmp/github_key -o StrictHostKeyChecking=accept-new
+    volumes:
+      - .:/app
+      - ~/.ssh/private_key:/tmp/github_key:ro
+      - ~/.ssh/known_hosts:/tmp/known_hosts:ro
