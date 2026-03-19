@@ -13,28 +13,49 @@ Today: {today_str}
 
 All items below have already been scored ≥{SCORE_THRESHOLD}/10 for relevance — do not re-filter, summarize everything.
 
-Output format (Markdown):
+Output format (Markdown). Follow this structure exactly, including the horizontal rules and spacing shown:
 
-## Daily Tech Trends — {today_str}
+# Daily Tech Trends
+## {today_str}
 
-### TL;DR
+---
+
+## TL;DR
+
 - 3–5 bullets on the most important things happening today
 
-### Top Stories
-For each item:
-#### [Title](url)
-**Source:** ... | **Relevance score:** X/10
-**Why it matters:** 1–2 sentences
+---
+
+## Top Stories
+
+For each item use this template (keep the blank lines between fields):
+
+### [Title](url)
+
+> **Source:** GitHub / HackerNews / ArXiv / YouTube &nbsp;|&nbsp; **Score:** X/10
+
+**Why it matters:** 1–2 sentences explaining the significance.
+
 **Key points:**
 - bullet 1
 - bullet 2
-**Follow-up:** one question worth exploring
+- bullet 3
 
-### Emerging Patterns
+**Worth exploring:** one specific follow-up question or experiment
+
+---
+
+## Emerging Patterns
+
 1–2 paragraphs on cross-cutting themes across today's items.
 
-### What to Watch
-The single most important thing happening in this space right now, and why it's worth your attention this week. Be specific — name the tool, paper, or shift, and what you'd do to stay ahead of it.
+---
+
+## What to Watch
+
+> The single most important thing happening in this space right now.
+
+Name the tool, paper, or shift specifically, explain why it matters *this week*, and give one concrete action to stay ahead of it.
 
 ---
 
