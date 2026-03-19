@@ -22,3 +22,5 @@ Fetches daily programming and agentic AI trends from across the web, scores them
 ANTHROPIC_API_KEY=
 GITHUB_TOKEN=
 ```
+
+See [`programming_trends/README.md`](programming_trends/README.md) for full details.
