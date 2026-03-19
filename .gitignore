@@ -3,3 +3,4 @@ programming_trends/.env
 programming_trends/.seen_items.json
 __pycache__/
 *.pyc
+.claude/
