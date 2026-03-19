@@ -33,6 +33,9 @@ For each item:
 ### Emerging Patterns
 1–2 paragraphs on cross-cutting themes across today's items.
 
+### What to Watch
+The single most important thing happening in this space right now, and why it's worth your attention this week. Be specific — name the tool, paper, or shift, and what you'd do to stay ahead of it.
+
 ---
 
 Items:
