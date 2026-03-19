@@ -1,4 +1,6 @@
 import os
+import time
+import argparse
 import datetime
 import feedparser
 import requests
@@ -6,7 +8,6 @@ from pathlib import Path
 from anthropic import Anthropic
 from github import Github, Auth
 from dotenv import load_dotenv
-import praw
 
 load_dotenv(Path(__file__).parent / ".env")
 
@@ -15,9 +16,6 @@ load_dotenv(Path(__file__).parent / ".env")
 # ------------------------
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
 GITHUB_TOKEN      = os.getenv("GITHUB_TOKEN")
-REDDIT_CLIENT_ID  = os.getenv("REDDIT_CLIENT_ID")
-REDDIT_SECRET     = os.getenv("REDDIT_SECRET")
-REDDIT_USER_AGENT = "agentic-tech-bot/0.1"
 
 OBSIDIAN_VAULT = Path.home() / "Documents" / "Obsidian" / "TechTrends"
 OBSIDIAN_VAULT.mkdir(parents=True, exist_ok=True)
@@ -36,7 +34,6 @@ YOUTUBE_CHANNELS = {
     "Andrej Karpathy": "UCXUPKJO5MZQMU11wm2QEyYQ",
 }
 
-REDDIT_SUBS    = ["MachineLearning", "LocalLLaMA", "programming", "ClaudeAI"]
 GITHUB_QUERIES = ["multi-agent AI", "agentic workflow", "MCP server LLM"]
 
 today_str       = datetime.date.today().strftime("%Y-%m-%d")
@@ -65,32 +62,6 @@ def fetch_github(max_per_query=3):
                 })
         except Exception as e:
             print(f"  [github] error on '{query}': {e}")
-    return items
-
-# ------------------------
-# FETCH: Reddit
-# ------------------------
-def fetch_reddit(max_per_sub=3):
-    if not (REDDIT_CLIENT_ID and REDDIT_SECRET):
-        print("  [skip] Reddit credentials not set")
-        return []
-    reddit = praw.Reddit(
-        client_id=REDDIT_CLIENT_ID,
-        client_secret=REDDIT_SECRET,
-        user_agent=REDDIT_USER_AGENT,
-    )
-    items = []
-    for sub in REDDIT_SUBS:
-        try:
-            for post in reddit.subreddit(sub).hot(limit=max_per_sub):
-                items.append({
-                    "title":       post.title,
-                    "url":         f"https://reddit.com{post.permalink}",
-                    "description": (post.selftext or "")[:400],
-                    "source":      f"Reddit/r/{sub}",
-                })
-        except Exception as e:
-            print(f"  [reddit] error on r/{sub}: {e}")
     return items
 
 # ------------------------
@@ -214,7 +185,7 @@ def write_note(content):
         f.write("---\n")
         f.write(f"date: {today_str}\n")
         f.write(f"tags: [tech-trends, agentic-ai, daily-brief]\n")
-        f.write(f"sources: [GitHub, Reddit, HackerNews, ArXiv, YouTube]\n")
+        f.write(f"sources: [GitHub, HackerNews, ArXiv, YouTube]\n")
         f.write("---\n\n")
         f.write(content)
     print(f"Note written: {daily_note_path}")
@@ -228,8 +199,6 @@ def main():
     all_items = []
     print("  GitHub...")
     all_items += fetch_github()
-    print("  Reddit...")
-    all_items += fetch_reddit()
     print("  Hacker News...")
     all_items += fetch_hn()
     print("  ArXiv...")
@@ -243,4 +212,19 @@ def main():
     write_note(summary)
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--start", metavar="HH:MM", help="Wait until this time before running")
+    args = parser.parse_args()
+
+    if args.start:
+        target = datetime.datetime.strptime(args.start, "%H:%M").replace(
+            year=datetime.date.today().year,
+            month=datetime.date.today().month,
+            day=datetime.date.today().day,
+        )
+        wait = (target - datetime.datetime.now()).total_seconds()
+        if wait > 0:
+            print(f"Waiting until {args.start} ({int(wait)}s)...")
+            time.sleep(wait)
+
     main()
