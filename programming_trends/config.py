@@ -9,7 +9,9 @@ load_dotenv(Path(__file__).parent / ".env")
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
 GITHUB_TOKEN      = os.getenv("GITHUB_TOKEN")
 
-OBSIDIAN_VAULT = Path.home() / "Documents" / "Obsidian" / "TechTrends"
+OBSIDIAN_VAULT = Path(
+    os.getenv("OUTPUT_DIR", str(Path.home() / "Documents" / "Obsidian" / "TechTrends"))
+)
 OBSIDIAN_VAULT.mkdir(parents=True, exist_ok=True)
 
 SEEN_FILE = Path(__file__).parent / ".seen_items.json"
