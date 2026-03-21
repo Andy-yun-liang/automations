@@ -10,6 +10,8 @@ OpenClaw is free and open-source, but you still pay for the underlying Claude AP
 
 `programming_trends/` is the automation I used to benchmark this. It fetches daily AI/programming trends, scores them with Claude, and writes a markdown briefing to an Obsidian vault — exactly **2 API calls per day**.
 
+> You can read the curated markdown files in the `vault/` directory
+
 **Current cost (lean, direct API): ~$0.08/day**
 
 **Estimated cost through OpenClaw:**
