@@ -2,8 +2,6 @@
 set -e
 
 cd /app
-git config --local user.email "automation@local"
-git config --local user.name "Automation Bot"
 
 echo "Watching /app/vault for new markdown files..."
 
