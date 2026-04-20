@@ -19,7 +19,7 @@ def save_seen(seen: dict):
 
 def filter_seen(items: list, seen: dict) -> list:
     yesterday = (datetime.date.today() - datetime.timedelta(days=1)).isoformat()
-    return [i for i in items if seen.get(i["url"], "") <= yesterday]
+    return [i for i in items if seen.get(i["url"], "") < yesterday]
 
 
 def mark_seen(items: list, seen: dict):
